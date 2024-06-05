@@ -1,0 +1,101 @@
+<?php
+
+namespace App\Http\Controllers\admin;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Products;
+use App\Models\Categories;
+use App\Components\Recusive;
+use Illuminate\Support\Facades\DB;
+use Exception;
+use Illuminate\Support\Facades\Log;
+use App\Traits\StorageImageTrait;
+use Illuminate\Support\Str;
+
+class AdminProductsController extends Controller
+{
+    use StorageImageTrait;
+    private $products;
+    private $categories;
+
+    public function __construct(Products $products, Categories $categories)
+    {
+        $this->products = $products;
+        $this->categories = $categories;
+    }
+    
+    public function index()
+    {
+        $data['data']['list'] = Products::all();
+        $data['config']['title'] = 'Admin - Products';
+        return view('admin.products.index', compact('data'));
+    }
+
+    public function create()
+    {
+        $data['config']['title'] = 'Admin - Products - Create';
+        $data['data']['categories'] = $this->getCategory($parentId = '');
+
+        return view('admin.products.create', compact('data'));
+    }
+
+    public function getCategory($parentId)
+    {
+        $data = $this->categories->all();
+        $recusive = new Recusive($data);
+        $htmlOption = $recusive->categoryRecusive($parentId);
+
+        return $htmlOption;
+    }
+
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required',
+            'price' => 'required|integer',
+            'feature_image_path' => 'required|image',
+            'quantity' => 'required|integer',
+            'description' => 'required',
+            'category_id' => 'required',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            // Insert data to products
+            $dataProductCreate = [
+                'name' => $request->name,
+                'slug' => Str::slug($request->name),
+                'price' => $request->price,
+                'quantity' => $request->quantity,
+                'description' => $request->description,
+                'category_id' => $request->category_id
+            ];
+
+            $dataUploadFeatureImage = $this->upload($request, 'feature_image_path');
+
+            if (!empty($dataUploadFeatureImage)) {
+                $dataProductCreate['feature_image_name'] = $dataUploadFeatureImage['file_name'];
+                $dataProductCreate['feature_image_path'] = $dataUploadFeatureImage['file_path'];
+            }
+
+            $product = $this->products->create($dataProductCreate);
+
+            DB::commit();
+
+            return redirect()->route('admin.products')->with('success', 'Added success');
+        } catch (Exception $exception) {
+            DB::rollBack();
+            Log::error('Message' . $exception->getMessage() . 'Line' . $exception->getLine());
+        }
+    }
+
+    public function delete($id)
+    {
+        $product = Products::findOrFail($id);
+        $product->delete();
+
+        return response()->json(['message' => 'Xóa sản phẩm thành công']);
+    }
+}

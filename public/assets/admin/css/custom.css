@@ -1,0 +1,25 @@
+.line-show-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 !important;
+    margin: .75em;
+    border: none !important;
+}
+
+
+.img-box {
+    width: 100px;
+    height: 80px;
+    display: inline-block;
+    border: none !important;
+}
+
+.img-box img{
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
