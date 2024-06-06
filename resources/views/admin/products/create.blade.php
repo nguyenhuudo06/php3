@@ -49,7 +49,7 @@
                             <label>Category</label>
                             <select class="form-control" name="category_id">
                                 <option value="0">Select category</option>
-                                {{!! $data['data']['categories'] !!}}
+                                {{ $data['data']['categories'] }}
                             </select>
                         </div>
                     </div>
@@ -58,6 +58,6 @@
                     </div>
                 </form>
             </div>
-        </div>     
+        </div>
     </div>
 @endsection

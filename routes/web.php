@@ -11,17 +11,10 @@ use App\Http\Controllers\admin\AdminCategoriesController;
 use App\Http\Controllers\admin\AdminBrandsController;
 use App\Http\Controllers\users\ProductsController;
 use App\Http\Controllers\admin\AdminRolesController;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MyTestEmail;
+use App\Models\User;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
 
 require __DIR__ . '/auth.php';
 
@@ -39,23 +32,18 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// SendMail
+// Route::get('/sendmail', function() {
+//     $data = User::findOrFail(1);
+//     Mail::to('nguyenhuudo1206@gmail.com')->send(new MyTestEmail($data));
+// });
 
 
-
-
-
-
-
-
-
-
-// Auth tu than van dong
 
 // Route::get('/login', [AuthController::class, 'index'])->name('auth.login');
 // Route::post('/login-post', [AuthController::class, 'login'])->name('auth.loginPost');
-Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
-// User
+Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
 Route::get('/', [HomeController::class, 'index'])->name('users.home');
 Route::get('/home', [HomeController::class, 'index']);
@@ -64,12 +52,10 @@ Route::get('/products', [ProductsController::class, 'index'])->name('users.produ
 Route::get('/products/details/{id}', [ProductsController::class, 'details'])->name('users.products.details');
 Route::get('/search', [ProductsController::class, 'search'])->name('users.products.search');
 
-
-// Admin
 Route::middleware('auth')->prefix('admin')->group(function () {
 
     Route::get('/', [AdminProductsController::class, 'index'])->name('admin');
-    Route::get('products', [AdminProductsController::class, 'index'])->name('admin.products')->middleware('can:product-view');
+    Route::get('products', [AdminProductsController::class, 'index'])->name('admin.products');
     Route::get('products/create', [AdminProductsController::class, 'create'])->name('admin.products.create');
     Route::delete('products/{id}', [AdminProductsController::class, 'delete'])->name('admin.products.delete')->middleware('can:product-delete');
     Route::post('products/store', [AdminProductsController::class, 'store'])->name('admin.products.store');
@@ -96,6 +82,3 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('roles/create', [AdminRolesController::class, 'create'])->name('admin.roles.create');
     Route::post('roles/store', [AdminRolesController::class, 'store'])->name('admin.roles.store');
 });
-
-
-// Role
