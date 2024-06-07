@@ -1,9 +1,8 @@
 @extends('layouts.users')
 
 @section('content')
-    <div class="container-fluid page-header">
+    <div class="container-fluid page-header"></div>
 
-    </div>
     <div class="container-fluid fruite py-5">
         <div class="container py-5">
             <div class="row g-4">

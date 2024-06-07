@@ -24,10 +24,10 @@ class AdminProductsController extends Controller
         $this->products = $products;
         $this->categories = $categories;
     }
-    
+
     public function index()
     {
-        $data['data']['list'] = Products::all();
+        $data['data']['list'] = Products::with('category')->get();
         $data['config']['title'] = 'Admin - Products';
         return view('admin.products.index', compact('data'));
     }
@@ -70,7 +70,7 @@ class AdminProductsController extends Controller
                 'price' => $request->price,
                 'quantity' => $request->quantity,
                 'description' => $request->description,
-                'category_id' => $request->category_id
+                'category_id' => $request->category_id ?: null,
             ];
 
             $dataUploadFeatureImage = $this->upload($request, 'feature_image_path');
@@ -88,6 +88,7 @@ class AdminProductsController extends Controller
         } catch (Exception $exception) {
             DB::rollBack();
             Log::error('Message' . $exception->getMessage() . 'Line' . $exception->getLine());
+            return redirect()->route('admin.products')->with('success', 'Something went wrong!');
         }
     }
 

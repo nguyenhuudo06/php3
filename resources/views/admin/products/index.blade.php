@@ -35,7 +35,7 @@
                                             <td>{{ $item->name }}</td>
                                             <td>{{ $item->price }}</td>
                                             <td>{{ $item->quantity }}</td>
-                                            <td>{{ $item->category_id }}</td>
+                                            <td>{{ $item?->category?->name }}</td>
                                             <td>{{ $item->user_id }}</td>
                                             <td>{{ $item->brand_id }}</td>
                                             <td>

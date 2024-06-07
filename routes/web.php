@@ -14,6 +14,9 @@ use App\Http\Controllers\admin\AdminRolesController;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\MyTestEmail;
 use App\Models\User;
+use App\Http\Controllers\GoogleAuthController;
+use App\Http\Controllers\users\CartController;
+use App\Http\Controllers\CheckoutController;
 
 
 require __DIR__ . '/auth.php';
@@ -37,20 +40,24 @@ Route::middleware('auth')->group(function () {
 //     $data = User::findOrFail(1);
 //     Mail::to('nguyenhuudo1206@gmail.com')->send(new MyTestEmail($data));
 // });
-
-
-
 // Route::get('/login', [AuthController::class, 'index'])->name('auth.login');
 // Route::post('/login-post', [AuthController::class, 'login'])->name('auth.loginPost');
+
+Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('google-auth');
+Route::get('/auth/google/call-back', [GoogleAuthController::class, 'callbackGoogle']);
 
 Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
 Route::get('/', [HomeController::class, 'index'])->name('users.home');
 Route::get('/home', [HomeController::class, 'index']);
-
 Route::get('/products', [ProductsController::class, 'index'])->name('users.products.index');
 Route::get('/products/details/{id}', [ProductsController::class, 'details'])->name('users.products.details');
 Route::get('/search', [ProductsController::class, 'search'])->name('users.products.search');
+
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+Route::post('/cart/remove', [CartController::class, 'removeFromCart'])->name('cart.remove');
+Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
 
 Route::middleware('auth')->prefix('admin')->group(function () {
 

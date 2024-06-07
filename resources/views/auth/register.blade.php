@@ -113,13 +113,8 @@
 
                 <div class="social-auth-links text-center">
                     <p>- OR -</p>
-                    <a href="#" class="btn btn-block btn-primary">
-                        <i class="fab fa-facebook mr-2"></i>
-                        Sign up using Facebook
-                    </a>
-                    <a href="#" class="btn btn-block btn-danger">
-                        <i class="fab fa-google-plus mr-2"></i>
-                        Sign up using Google+
+                    <a href="{{ route('google-auth') }}" class="btn btn-block btn-dark">
+                        <i class="fa-brands fa-google mr-2"></i>Continute with Google
                     </a>
                 </div>
 

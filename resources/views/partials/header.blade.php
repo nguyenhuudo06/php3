@@ -31,18 +31,18 @@
                     <a href="{{ route('users.products.index') }}" class="nav-item nav-link">Product</a>
                 </div>
                 @if(Auth::id() > 0)
-                
+
                 <div class="navbar-nav ml-auto">
                     <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white"
                         data-bs-toggle="modal" data-bs-target="#searchModal"><i
                             class="fas fa-search text-primary"></i></button>
-                    <a href="#" class="nav-item nav-link"><i class="fa fa-shopping-cart"
+                    <a href="{{ route('cart.index') }}" class="nav-item nav-link"><i class="fa fa-shopping-cart"
                             aria-hidden="true"></i></a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
                                 class="fa fa-user" aria-hidden="true"></i></a>
                         <div class="dropdown-menu m-0 bg-secondary rounded-0 end-0">
-                            <a href="#" class="dropdown-item">Cart</a>
+                            <a href="{{ route('cart.index') }}" class="dropdown-item">Cart</a>
                             <a href="#" class="dropdown-item">Order</a>
                             <a href="#" class="dropdown-item">Information</a>
                             <a href="{{ route('auth.logout') }}" class="dropdown-item">Logout</a>
