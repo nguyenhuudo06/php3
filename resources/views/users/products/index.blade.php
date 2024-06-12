@@ -36,26 +36,32 @@
                             <div id="product-list" class="row g-4 justify-content-center">
                                 @foreach ($data['data']['list'] as $item)
                                     <div class="col-md-6 col-lg-4 col-xl-3">
-                                        <div class="rounded position-relative fruite-item">
+                                        <div
+                                            class="rounded position-relative fruite-item border border-secondary border-top-0 rounded-bottom">
                                             <div class="fruite-img">
                                                 <img src="{{ $item->feature_image_path }}"
                                                     class="img-fluid w-100 rounded-top" alt="">
                                             </div>
                                             @if (isset($item->category_id))
                                                 <div class="text-white bg-secondary px-3 py-1 rounded position-absolute"
-                                                    style="top: 10px; left: 10px;">{{ $item->category_id }}</div>
+                                                    style="top: 10px; left: 10px;">{{ $item->category?->name }}</div>
                                             @endif
-                                            <div class="p-4 border border-secondary border-top-0 rounded-bottom">
+                                            <div class="p-4">
                                                 <h4>{{ $item->name }}</h4>
                                                 <p>{{ $item->price }}</p>
                                                 <div class="d-flex justify-content-between flex-lg-wrap">
                                                     <a href="{{ route('users.products.details', ['id' => $item->id]) }}"
-                                                        class="btn border border-secondary rounded-pill px-3 text-primary"><i
-                                                            class="fa-solid fa-eye"></i> Views</a>
-                                                    <a href="#"
-                                                        class="btn border border-secondary rounded-pill px-3 text-primary"><i
-                                                            class="fa fa-shopping-bag me-2 text-primary"></i> Add to
-                                                        cart</a>
+                                                        class="flex-grow-1 btn btn-sm btn-outline-primary rounded-pill px-3 me-lg-2 mb-2 mb-lg-0 mt-1"><i
+                                                            class="fas fa-eye me-1"></i> Views</a>
+                                                    <form action="{{ route('cart.add') }}" method="POST" class="d-block flex-grow-1 mt-1">
+                                                        @csrf
+                                                        <input type="hidden" name="product_id" value="{{ $item->id }}">
+                                                        <input type="hidden" name="quantity" value="1">
+                                                        <button type="submit"
+                                                            class="btn btn-sm btn-outline-primary rounded-pill px-3"><i
+                                                                class="fa fa-shopping-bag me-1"></i> Add to
+                                                            cart</button>
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>

@@ -3,10 +3,11 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Fruitables</title>
+    <title>{{ $data['config']['title'] ?? 'Fruitables'}}</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,6 +31,9 @@
 
     <!-- Template Stylesheet -->
     <link href="{{ URL::asset('assets/users/css/style.css') }}" rel="stylesheet">
+
+    <!-- Additional CSS -->
+    @stack('styles')
 </head>
 
 <body>
@@ -93,6 +97,9 @@
     <!-- Template Javascript -->
     <script src="{{ URL::asset('assets/users/js/main.js') }}"></script>
     <script src="{{ URL::asset('assets/users/js/search.js') }}"></script>
+
+    <!-- Additional JS -->
+    @stack('scripts')
 
 </body>
 

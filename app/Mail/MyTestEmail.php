@@ -13,33 +13,33 @@ class MyTestEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    protected $data;
+    public $data;
+    public $view;
+    public $subject;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($data)
+    public function __construct(array $data, string $view, string $subject)
     {
         $this->data = $data;
+        $this->view = $view;
+        $this->subject = $subject;
     }
 
-    /**
-     * Get the message envelope.
-     */
+    // Định nghĩa tiêu đề và các thuộc tính khác của emai
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'My Test Email',
+            subject: $this->subject,
         );
     }
 
-    /**
-     * Get the message content definition.
-     */
+    // Định nghĩa nội dung của email, bao gồm view được sử dụng và dữ liệu truyền vào view.
     public function content(): Content
     {
         return new Content(
-            view: 'mail.test-email',
+            view: $this->view,
             with: ['data' => $this->data],
         );
     }
@@ -49,6 +49,7 @@ class MyTestEmail extends Mailable
      *
      * @return array<int, \Illuminate\Mail\Mailables\Attachment>
      */
+    // Định nghĩa các tập tin đính kèm cho email.
     public function attachments(): array
     {
         return [];

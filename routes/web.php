@@ -17,6 +17,11 @@ use App\Models\User;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\users\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\admin\AdminOrdersController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\admin\AdminPermissionController;
+use App\Http\Controllers\admin\AdminDashboardController;
+use App\Http\Controllers\users\OrderController;
 
 
 require __DIR__ . '/auth.php';
@@ -36,10 +41,22 @@ Route::middleware('auth')->group(function () {
 });
 
 // SendMail
-// Route::get('/sendmail', function() {
-//     $data = User::findOrFail(1);
-//     Mail::to('nguyenhuudo1206@gmail.com')->send(new MyTestEmail($data));
+// Route::get('/sendmail', function () {
+//     $user = User::findOrFail(1);
+//     $data = [
+//         'name' => $user->name,
+//         'email' => $user->email,
+//     ];
+
+//     try {
+//         Mail::to('nguyenhuudo1206@gmail.com')->send(new MyTestEmail($data, 'mails.test-email', 'test mail'));
+//         return response()->json(['message' => 'Gửi email thành công'], 200);
+//     } catch (\Exception $e) {
+//         return response()->json(['error' => 'Gửi email không thành công. Error: ' . $e->getMessage()], 500);
+//     }
+
 // });
+
 // Route::get('/login', [AuthController::class, 'index'])->name('auth.login');
 // Route::post('/login-post', [AuthController::class, 'login'])->name('auth.loginPost');
 
@@ -54,25 +71,70 @@ Route::get('/products', [ProductsController::class, 'index'])->name('users.produ
 Route::get('/products/details/{id}', [ProductsController::class, 'details'])->name('users.products.details');
 Route::get('/search', [ProductsController::class, 'search'])->name('users.products.search');
 
-Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
-Route::post('/cart/remove', [CartController::class, 'removeFromCart'])->name('cart.remove');
-Route::get('/checkout', [CheckoutController::class, 'checkout'])->name('checkout');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add', [CartController::class, 'addToCart'])->name('cart.add');
+    Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+    Route::post('/cart/remove', [CartController::class, 'removeFromCart'])->name('cart.remove');
+
+    Route::get('/order', [OrderController::class, 'index'])->name('order.index');
+
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout/store', [CheckoutController::class, 'store'])->name('checkout.store');
+
+    // Route::post('/vnpay_payment', [PaymentController::class, 'vnpay_payment'])->name('vnpay_payment');
+    Route::post('/vnpay_payment/{id}/{total}', [PaymentController::class, 'vnpay_payment'])->name('vnpay_payment');
+    Route::get('/vnpay_php/vnpay_return', [PaymentController::class, 'vnpay_return'])->name('vnpay_return');
+});
 
 Route::middleware('auth')->prefix('admin')->group(function () {
 
-    Route::get('/', [AdminProductsController::class, 'index'])->name('admin');
-    Route::get('products', [AdminProductsController::class, 'index'])->name('admin.products');
-    Route::get('products/create', [AdminProductsController::class, 'create'])->name('admin.products.create');
-    Route::delete('products/{id}', [AdminProductsController::class, 'delete'])->name('admin.products.delete')->middleware('can:product-delete');
-    Route::post('products/store', [AdminProductsController::class, 'store'])->name('admin.products.store');
+    // Admin products
+    Route::get('/', [AdminProductsController::class, 'index'])
+        ->name('admin')
+        ->middleware('can:view_product');
 
-    Route::get('categories', [AdminCategoriesController::class, 'index'])->name('admin.categories')->middleware('can:category-view');
-    Route::get('categories/create', [AdminCategoriesController::class, 'create'])->name('admin.categories.create');
-    Route::post('categories/store', [AdminCategoriesController::class, 'store'])->name('admin.categories.store');
-    Route::get('categories/delete/{id}', [AdminCategoriesController::class, 'delete'])->name('admin.categories.delete');
-    Route::get('categories/edit/{id}', [AdminCategoriesController::class, 'edit'])->name('admin.categories.edit');
-    Route::post('categories/update/{id}', [AdminCategoriesController::class, 'update'])->name('admin.categories.update');
+    Route::get('products', [AdminProductsController::class, 'index'])
+        ->name('admin.products')
+        ->middleware('can:view_product');
+
+    Route::get('products/create', [AdminProductsController::class, 'create'])
+        ->name('admin.products.create')
+        ->middleware('can:view_product');
+
+    Route::delete('products/{id}', [AdminProductsController::class, 'delete'])
+        ->name('admin.products.delete');
+
+    Route::post('products/store', [AdminProductsController::class, 'store'])
+        ->name('admin.products.store')
+        ->middleware('can:add_product');
+
+    // Admin categories
+    Route::get('categories', [AdminCategoriesController::class, 'index'])
+        ->name('admin.categories')
+        ->middleware('can:view_category');
+
+    Route::get('categories/create', [AdminCategoriesController::class, 'create'])
+        ->name('admin.categories.create')
+        ->middleware('can:view_category');
+
+    Route::post('categories/store', [AdminCategoriesController::class, 'store'])
+        ->name('admin.categories.store')
+        ->middleware('can:add_category');
+
+    Route::get('categories/delete/{id}', [AdminCategoriesController::class, 'delete'])
+        ->name('admin.categories.delete')
+        ->middleware('can:delete_category');
+
+    Route::get('categories/edit/{id}', [AdminCategoriesController::class, 'edit'])
+        ->name('admin.categories.edit')
+        ->middleware('can:view_category');
+
+    Route::post('categories/update/{id}', [AdminCategoriesController::class, 'update'])
+        ->name('admin.categories.update')
+        ->middleware('can:update_category_category');
+
 
     Route::get('users', [AdminUsersController::class, 'index'])->name('admin.users');
     Route::get('users/create', [AdminUsersController::class, 'create'])->name('admin.users.create');
@@ -88,4 +150,9 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('roles', [AdminRolesController::class, 'index'])->name('admin.roles');
     Route::get('roles/create', [AdminRolesController::class, 'create'])->name('admin.roles.create');
     Route::post('roles/store', [AdminRolesController::class, 'store'])->name('admin.roles.store');
+
+    Route::get('orders', [AdminOrdersController::class, 'index'])->name('admin.orders');
+
+    Route::get('/chart-data', [AdminDashboardController::class , 'index'])->name('admin.dashboard');
+    Route::get('/chart-data-api', [AdminDashboardController::class , 'getChartData'])->name('admin.dashboard.data');
 });

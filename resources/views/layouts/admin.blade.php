@@ -26,8 +26,9 @@
     <link rel="stylesheet" href="{{ URL::asset('assets/admin/css/adminlte.min.css') }}">
     <!-- Custom css -->
     <link rel="stylesheet" href="{{ URL::asset('assets/admin/css/custom.css') }}">
-    
 
+    @stack('styles')
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -57,8 +58,7 @@
                         <a href="#" class="dropdown-item">
                             <!-- Message Start -->
                             <div class="media">
-                                <img src="" alt="User Avatar"
-                                    class="img-size-50 mr-3 img-circle">
+                                <img src="" alt="User Avatar" class="img-size-50 mr-3 img-circle">
                                 <div class="media-body">
                                     <h3 class="dropdown-item-title">
                                         Brad Diesel
@@ -74,8 +74,7 @@
                         <a href="#" class="dropdown-item">
                             <!-- Message Start -->
                             <div class="media">
-                                <img src="" alt="User Avatar"
-                                    class="img-size-50 img-circle mr-3">
+                                <img src="" alt="User Avatar" class="img-size-50 img-circle mr-3">
                                 <div class="media-body">
                                     <h3 class="dropdown-item-title">
                                         John Pierce
@@ -91,8 +90,7 @@
                         <a href="#" class="dropdown-item">
                             <!-- Message Start -->
                             <div class="media">
-                                <img src="" alt="User Avatar"
-                                    class="img-size-50 img-circle mr-3">
+                                <img src="" alt="User Avatar" class="img-size-50 img-circle mr-3">
                                 <div class="media-body">
                                     <h3 class="dropdown-item-title">
                                         Nora Silvester
@@ -157,7 +155,7 @@
                             <span class="float-right text-muted text-sm">2 days</span>
                         </a>
                         <div class="dropdown-divider"></div>
-                        
+
                         <a href="{{ route('auth.logout') }}" class="dropdown-item dropdown-footer">Logout</a>
                     </div>
                 </li>
@@ -184,7 +182,7 @@
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
                         <li class="nav-item">
-                            <a href="#" class="nav-link active">
+                            <a href="{{ route('admin.dashboard') }}" class="nav-link active">
                                 <i class="fa fa-pie-chart" aria-hidden="true"></i>
                                 <p>
                                     Dashboard
@@ -193,7 +191,7 @@
                         </li>
                         <li class="nav-item has-treeview">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-table"></i>
+                                <i class="nav-icon fa-solid fa-bars"></i>
                                 <p>
                                     Categories
                                     <i class="fas fa-angle-left right"></i>
@@ -216,7 +214,7 @@
                         </li>
                         <li class="nav-item has-treeview">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-table"></i>
+                                <i class="nav-icon fa-brands fa-slack"></i>
                                 <p>
                                     Brands
                                     <i class="fas fa-angle-left right"></i>
@@ -239,7 +237,7 @@
                         </li>
                         <li class="nav-item has-treeview">
                             <a href="{{ route('admin.products') }}" class="nav-link">
-                                <i class="nav-icon fas fa-table"></i>
+                                <i class="nav-icon fa-solid fa-dolly"></i>
                                 <p>
                                     Products
                                     <i class="fas fa-angle-left right"></i>
@@ -262,7 +260,7 @@
                         </li>
                         <li class="nav-item has-treeview">
                             <a href="{{ route('admin.users') }}" class="nav-link">
-                                <i class="nav-icon fas fa-table"></i>
+                                <i class="nav-icon fa-solid fa-user"></i>
                                 <p>
                                     Users
                                     <i class="fas fa-angle-left right"></i>
@@ -283,9 +281,17 @@
                                 </li>
                             </ul>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('admin.orders') }}" class="nav-link">
+                                <i class="nav-icon fa-solid fa-truck-fast"></i>
+                                <p>
+                                    Orders
+                                </p>
+                            </a>
+                        </li>
                         <li class="nav-item has-treeview">
                             <a href="{{ route('admin.users') }}" class="nav-link">
-                                <i class="nav-icon fas fa-table"></i>
+                                <i class="nav-icon fa-solid fa-key"></i>
                                 <p>
                                     Roles
                                     <i class="fas fa-angle-left right"></i>
@@ -294,6 +300,29 @@
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <a href="{{ route('admin.roles') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>List</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Add</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item has-treeview">
+                            <a href="" class="nav-link">
+                                <i class="nav-icon fas fa-table"></i>
+                                <p>
+                                    RBAC
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>List</p>
                                     </a>
@@ -335,8 +364,8 @@
     <!-- page script -->
     <script src="{{ URL::asset('assets/admin/js/summernote-bs4.min.js') }}"></script>
     <script src="{{ URL::asset('assets/admin/js/sweetalert2.all.min.js') }}"></script>
-    <script src="{{ URL::asset('assets/admin/js/main.js') }}"></script>
-    @yield('js')
+
+    @stack('scripts')
 </body>
 
 </html>

@@ -23,20 +23,34 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('product-view', function (User $user) {
-            return $user->checkPermissionAccess('view_product');
-        });
-
-        Gate::define('product-delete', function (User $user) {
-            return $user->checkPermissionAccess('delete_product');
-        });
-
-        Gate::define('category-view', function (User $user) {
+        // Category gate
+        Gate::define('view_category', function (User $user) {
             return $user->checkPermissionAccess('view_category');
         });
 
-        Gate::define('brand-delete', function (User $user) {
-            return $user->checkPermissionAccess('brand-delete');
+        Gate::define('add_category', function (User $user) {
+            return $user->checkPermissionAccess('add_category');
+        });
+        Gate::define('update_category', function (User $user) {
+            return $user->checkPermissionAccess('update_category');
+        });
+        Gate::define('delete_category', function (User $user) {
+            return $user->checkPermissionAccess('delete_category');
+        });
+
+        // roduct gate
+        Gate::define('view_product', function (User $user) {
+            return $user->checkPermissionAccess('view_product');
+        });
+
+        Gate::define('add_product', function (User $user) {
+            return $user->checkPermissionAccess('add_product');
+        });
+        Gate::define('update_product', function (User $user) {
+            return $user->checkPermissionAccess('update_product');
+        });
+        Gate::define('delete_product', function (User $user) {
+            return $user->checkPermissionAccess('delete_product');
         });
     }
 }

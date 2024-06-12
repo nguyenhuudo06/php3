@@ -12,7 +12,7 @@ class ProductsController extends Controller
     public function index()
     {
 
-        $data['data']['list'] = DB::table('products')->orderBy('id', 'DESC')->paginate(2);
+        $data['data']['list'] = Products::with('category')->orderBy('id', 'DESC')->paginate(8);
         $data['config']['title'] = 'Products';
         return view('users.products.index', compact('data'));
     }

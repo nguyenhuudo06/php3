@@ -22,6 +22,11 @@ class CartController extends Controller
 
     public function addToCart(Request $request)
     {
+        // Kiểm tra người dùng đã đăng nhập chưa
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'You need to login to add products to the cart.');
+        }
+
         // Xác thực dữ liệu đầu vào
         $request->validate([
             'product_id' => 'required|exists:products,id',
@@ -51,9 +56,9 @@ class CartController extends Controller
         }
 
         // Trả về phản hồi cho người dùng
-        // return response()->json(['message' => 'Product added to cart successfully']);
-        return redirect()->back()->with('success','Added successful');
+        return redirect()->back()->with('success', 'Product added to cart successfully');
     }
+
 
     public function removeFromCart(Request $request)
     {
@@ -70,6 +75,45 @@ class CartController extends Controller
         $cartItem->delete();
 
         // return response()->json(['message' => 'Product removed successfully']);
-        return redirect()->back()->with('success','Removed');
+        return redirect()->back()->with('success', 'Removed');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $cartItem = Cart::where('user_id', auth()->id())->where('id', $id)->first();
+
+        if ($cartItem) {
+            $quantity = $request->input('quantity');
+            if ($quantity > 0) {
+                $cartItem->quantity = $quantity;
+                $cartItem->save();
+                $list = Cart::where('user_id', auth()->id())->with('product')->get();
+                $overall = $list->sum(function ($item) {
+                    return $item->quantity * $item->product->price;
+                });
+                return response()->json(['success' => true, 'overall' => $overall]);
+            } else {
+                $cartItem->delete();
+                $list = Cart::where('user_id', auth()->id())->with('product')->get();
+                $overall = $list->sum(function ($item) {
+                    return $item->quantity * $item->product->price;
+                });
+                return response()->json(['success' => true, 'remove' => true, 'overall' => $overall]);
+            }
+        }
+
+        return response()->json(['success' => false]);
+    }
+
+    public function remove($id)
+    {
+        $cartItem = Cart::where('user_id', auth()->id())->where('id', $id)->first();
+
+        if ($cartItem) {
+            $cartItem->delete();
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false]);
     }
 }

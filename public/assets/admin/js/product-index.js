@@ -6,16 +6,12 @@ $(document).ready(function () {
         ]
     });
 
-    $("#example2").DataTable({
-        order: [[0, 'desc']]
-    });
-
-    $('.textarea').summernote()
 
     $('.delete-product').click(function (e) {
         e.preventDefault();
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
-        var productId = $(this).data('id');
+        var id = $(this).data('id');
+        var url = $(this).data('url');
         Swal.fire({
             title: 'Bạn chắc chắn muốn xóa sản phẩm này?',
             icon: 'warning',
@@ -27,13 +23,13 @@ $(document).ready(function () {
                 // Nếu người dùng xác nhận xóa, gửi yêu cầu xóa sản phẩm đến controller
                 $.ajax({
                     type: "DELETE",
-                    url: "products/" + productId,
+                    url: url,
                     data: {
                         _token: csrfToken, // Sử dụng token CSRF ở đây
                     },
                     success: function (response) {
                         // Xử lý khi xóa thành công
-                        $('#product-' + productId).remove();
+                        $('#product-' + id).remove();
                         Swal.fire('Xóa thành công!', '', 'success');
                     },
                     error: function (xhr, status, error) {

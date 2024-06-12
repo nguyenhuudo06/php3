@@ -23,20 +23,28 @@
                             <textarea name="display_name" placeholder="Place some text here"
                                 style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">{{ old('display_name') }}</textarea>
                         </div>
+                        <div class="row align-items-center mb-3">
+                            <div class="col-auto">
+                                <input type="checkbox" name="check-all-permission" id="check-all-permission">
+                                <label for="check-all-permission" class="form-check-label">Check all permissions</label>
+                            </div>
+                        </div>
                         <div class="row">
                             @foreach ($data['config']['permissionParent'] as $itemParent)
-                                <div class="card border-primary mb-3 col-md-12">
-                                    <div class="card-header bg-success bg-gradient">
-                                        <input type="checkbox" class="checkbox_wrapper" id="">
-                                        <label for="">{{ $itemParent->name }}</label>
-                                    </div>
-                                    <div class="card-body row text-primary">
-                                        @foreach ($itemParent->permissionChildren as $itemChildren)
-                                            <div class="card-title col-md-3">
-                                                <input type="checkbox" class="checkbox_children" name="permission_id[]" value={{ $itemChildren->id }}>
-                                                <label for="">{{ $itemChildren->name }}</label>
-                                            </div>
-                                        @endforeach
+                                <div class="col-lg-3 col-md-4 col-sm-6">
+                                    <div class="card border-primary mb-3">
+                                        <div class="card-header bg-secondary bg-gradient">
+                                            <input type="checkbox" class="checkbox_wrapper" id="">
+                                            <label for="">{{ $itemParent->name }}</label>
+                                        </div>
+                                        <div class="card-body text-primary">
+                                            @foreach ($itemParent->permissionChildren as $itemChildren)
+                                                <div>
+                                                    <input type="checkbox" class="checkbox_children" name="permission_id[]" value={{ $itemChildren->id }}>
+                                                    <label for="">{{ $itemChildren->name }}</label>
+                                                </div>
+                                            @endforeach
+                                        </div>
                                     </div>
                                 </div>
                             @endforeach
@@ -54,7 +62,11 @@
 @section('js')
 <script>
     $('.checkbox_wrapper').on('click', function() {
-        $(this).closest('.card').find('.checkbox_children').prop('checked', $(this).prop('checked'))
+        $(this).closest('.card').find('.checkbox_children').prop('checked', $(this).prop('checked'));
+    })
+
+    $('#check-all-permission').on('click', function(){
+        $('.checkbox_children').prop('checked', $(this).prop('checked'));
     })
 </script>
 @endsection

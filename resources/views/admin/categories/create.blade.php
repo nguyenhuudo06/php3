@@ -19,7 +19,7 @@
                         <label>Parent category</label>
                         <select class="form-control" name="parent_id">
                             <option value="0">Chọn danh mục cha</option>
-                            {{ $data['data']['categories'] }}
+                            {!! $data['data']['categories'] !!}
                         </select>
                     </div>
                 </div>

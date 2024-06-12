@@ -28,7 +28,7 @@
             <div class="col-lg-3 col-md-6">
                 <div class="footer-item">
                     <h4 class="text-light mb-3">Why People Like us!</h4>
-                    <p class="mb-4">typesetting, remaining essentially unchanged. It was 
+                    <p class="mb-4">typesetting, remaining essentially unchanged. It was
                         popularised in the 1960s with the like Aldus PageMaker including of Lorem Ipsum.</p>
                     <a href="" class="btn border-secondary py-2 px-4 rounded-pill text-primary">Read More</a>
                 </div>
@@ -62,7 +62,7 @@
                     <p>Email: Example@gmail.com</p>
                     <p>Phone: +0123 4567 8910</p>
                     <p>Payment Accepted</p>
-                    <img src="img/payment.png" class="img-fluid" alt="">
+                    {{-- <img src="img/payment.png" class="img-fluid" alt=""> --}}
                 </div>
             </div>
         </div>

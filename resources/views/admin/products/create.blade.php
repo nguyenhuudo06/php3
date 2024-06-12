@@ -1,5 +1,9 @@
 @extends('layouts.admin')
 
+@push('scripts')
+    <script src="{{ URL::asset('assets/admin/js/product-create.js') }}"></script>
+@endpush
+
 @section('content')
     <div class="content-wrapper d-flex justify-content-center">
         <div class="col-lg-8 px-0 mt-4">
@@ -42,7 +46,7 @@
                             @error('description')
                                 <span class="text-danger"><i>* {{ $message }}</i></span>
                             @enderror
-                            <textarea name="description" class="textarea" placeholder="Place some text here"
+                            <textarea id="textarea" name="description" class="textarea" placeholder="Place some text here"
                               style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">{{ old('description') }}</textarea>
                         </div>
                         <div class="form-group">

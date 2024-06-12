@@ -14,4 +14,9 @@ class Permission extends Model
     public function permissionChildren(){
         return $this->hasMany(Permission::class, 'parent_id');
     }
+
+    public function permissionParent()
+    {
+        return $this->belongsTo(Permission::class, 'parent_id');
+    }
 }

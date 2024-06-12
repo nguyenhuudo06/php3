@@ -27,12 +27,12 @@
                                             <tr>
                                                 <td style="width: 40px;">{{ $user->id }}</td>
                                                 <td>{{ $user->name }}</td>
-                                                <td>{{ $user->parent_id }}</td>
+                                                <td>{{ $user?->parent?->name }}</td>
                                                 <td>{{ $user->slug }}</td>
                                                 <td>
-                                                    <a href="{{ route('admin.categories.edit', ['id' => $user->id]) }}" class="btn text-light btn-primary"><i class="fa fa-pencil"
+                                                    <a href="{{ route('admin.categories.edit', ['id' => $user->id]) }}" class="btn btn-light"><i class="fa fa-pencil"
                                                             aria-hidden="true"></i></a>
-                                                    <a href="{{ route('admin.categories.delete', ['id' => $user->id]) }}" class="btn text-light btn-danger"><i class="fa fa-trash"
+                                                    <a href="{{ route('admin.categories.delete', ['id' => $user->id]) }}" class="btn btn-light"><i class="fa fa-trash"
                                                             aria-hidden="true"></i></a>
                                                 </td>
                                             </tr>

@@ -12,6 +12,7 @@ use Exception;
 use Illuminate\Support\Facades\Log;
 use App\Traits\StorageImageTrait;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class AdminProductsController extends Controller
 {
@@ -94,9 +95,19 @@ class AdminProductsController extends Controller
 
     public function delete($id)
     {
+        // Tìm sản phẩm theo ID
         $product = Products::findOrFail($id);
+
+        // Xóa ảnh feature_image_path nếu tồn tại
+        if ($product->feature_image_path) {
+            $imagePath = str_replace('/storage', '', $product->feature_image_path);
+            Storage::delete('public' . $imagePath);
+        }
+
+        // Xóa sản phẩm
         $product->delete();
 
-        return response()->json(['message' => 'Xóa sản phẩm thành công']);
+        // Trả về thông báo thành công
+        return response()->json(['message' => 'Xóa sản phẩm và ảnh thành công']);
     }
 }

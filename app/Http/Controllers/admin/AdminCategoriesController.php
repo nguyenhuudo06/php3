@@ -19,7 +19,7 @@ class AdminCategoriesController extends Controller
 
     public function index()
     {
-        $data['data']['list'] = Categories::all();
+        $data['data']['list'] = Categories::with('parent')->get();
         $data['config']['title'] = 'Admin - Categories';
 
         return view('admin.categories.index', compact('data'));
@@ -60,7 +60,7 @@ class AdminCategoriesController extends Controller
 
     public function edit($id)
     {
-        $category = $this->categories->find($id);
+        $category = $this->categories->findOrFail($id);
         $data['data']['infor'] = $category;
         $data['data']['categories'] = $this->getCategory($category->parent_id);
         $data['config']['title'] = 'Admin - Categories - Edit';

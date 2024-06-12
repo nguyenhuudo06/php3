@@ -1,9 +1,5 @@
 @extends('layouts.admin')
 
-@push('scripts')
-    <script src="{{ URL::asset('assets/admin/js/product-index.js') }}"></script>
-@endpush
-
 @section('content')
     <div class="content-wrapper">
 
@@ -20,35 +16,24 @@
                             <table id="example1" class="table table-bordered table-striped">
                                 <thead>
                                     <th>Id</th>
-                                    <th>Image</th>
-                                    <th>Name</th>
-                                    <th>Price</th>
-                                    <th>Quantity</th>
-                                    <th>Category</th>
                                     <th>User</th>
-                                    <th>Brand</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </thead>
                                 <tbody>
                                     @foreach ($data['data']['list'] as $item)
-                                        <tr id="product-{{ $item->id }}">
+                                        <tr id="order-{{ $item->id }}">
                                             <td style="width: 40px;">{{ $item->id }}</td>
-                                            <td class="img-box">
-                                                <img src="{{ $item->feature_image_path }}" alt="">
-                                            </td>
-                                            <td>{{ $item->name }}</td>
-                                            <td>{{ $item->price }}</td>
-                                            <td>{{ $item->quantity }}</td>
-                                            <td>{{ $item?->category?->name }}</td>
-                                            <td>{{ $item->user_id }}</td>
-                                            <td>{{ $item->brand_id }}</td>
+                                            <td>{{ $item->user->name }}</td>
+                                            <td>{{ $item->total_amount }}</td>
+                                            <td>{{ $item->status }}</td>
                                             <td>
-                                                <a href="" class="btn btn-light"><i class="fa fa-pencil"
+                                                <a href="" class="btn text-light btn-info"><i
+                                                        class="fa-regular fa-eye"></i></a>
+                                                <a href="" class="btn text-light btn-primary"><i class="fa fa-pencil"
                                                         aria-hidden="true"></i></a>
-                                                <button class="btn btn-light delete-product"
-                                                    data-id="{{ $item->id }}"
-                                                    data-url="{{ route('admin.products.delete', ['id' => $item->id]) }}"><i class="fa fa-trash"
-                                                        aria-hidden="true"></i></button>
+                                                <button class="btn text-light btn-danger delete-product" data-id="{{ $item->id }}"><i class="fa fa-trash" aria-hidden="true"></i></button>
                                             </td>
                                         </tr>
                                     @endforeach

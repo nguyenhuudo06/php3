@@ -9,13 +9,13 @@
                 @if ($data['data']['list']->isEmpty())
                     <p>Your cart is empty</p>
                 @else
-                    <table class="table">
+                    <table id="cart-table" class="table">
                         <thead>
                             <tr>
                                 <th scope="col">Products</th>
                                 <th scope="col">Name</th>
-                                <th scope="col">Price</th>
                                 <th scope="col">Quantity</th>
+                                <th scope="col">Price</th>
                                 <th scope="col">Total</th>
                                 <th scope="col">Handle</th>
                             </tr>
@@ -33,11 +33,8 @@
                                     <td>
                                         <p class="mb-0 mt-4">{{ $item?->product?->name }}</p>
                                     </td>
-                                    <td>
-                                        <p class="mb-0 mt-4">{{ $item?->product?->price }}</p>
-                                    </td>
-                                    <td>
-                                        <div class="input-group quantity mt-4" style="width: 100px;">
+                                    {{-- <td>
+                                        <div class="input-group mt-4" style="width: 100px;">
                                             <div class="input-group-btn">
                                                 <button class="btn btn-sm btn-minus rounded-circle bg-light border">
                                                     <i class="fa fa-minus"></i>
@@ -51,9 +48,35 @@
                                                 </button>
                                             </div>
                                         </div>
+                                    </td> --}}
+                                    <td>
+                                        <div class="input-group mt-4" style="width: 100px;">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-sm rounded-circle bg-light border btn-minus"
+                                                    data-url="{{ route('cart.update', $item->id) }}"
+                                                    data-id="{{ $item->id }}">
+                                                    <i class="fa fa-minus"></i>
+                                                </button>
+                                            </div>
+                                            <input type="text"
+                                                class="form-control form-control-sm text-center border-0 cart-quantity"
+                                                data-url="{{ route('cart.update', $item->id) }}"
+                                                data-id="{{ $item->id }}" value="{{ $item->quantity }}">
+                                            <div class="input-group-btn">
+                                                <button class="btn btn-sm rounded-circle bg-light border btn-plus"
+                                                    data-url="{{ route('cart.update', $item->id) }}"
+                                                    data-id="{{ $item->id }}">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </td>
                                     <td>
-                                        <p class="mb-0 mt-4">{{ $item?->quantity * $item?->product?->price }}</p>
+                                        <p class="mb-0 mt-4 product-price">{{ $item->product->price }}</p>
+                                    </td>
+                                    <td>
+                                        <p class="mb-0 mt-4 product-total">
+                                            {{ number_format($item->quantity * $item->product->price, 2) }}</p>
                                     </td>
                                     <td>
                                         <form action="{{ route('cart.remove') }}" method="POST">
@@ -63,9 +86,7 @@
                                                 <i class="fa fa-times text-danger"></i>
                                             </button>
                                         </form>
-
                                     </td>
-
                                 </tr>
                             @endforeach
                         </tbody>
@@ -74,7 +95,7 @@
             </div>
 
             <div class="mt-5">
-                <input type="text" class="border-0 border-bottom rounded me-5 py-3 mb-4" placeholder="Coupon Code">
+                <input type="text" class="border-0 border-bottom rounded me-5 p-3 mb-4" placeholder="Coupon Code">
                 <button class="btn border-secondary rounded-pill px-4 py-3 text-primary" type="button">Apply
                     Coupon</button>
             </div>
@@ -83,28 +104,37 @@
                 <div class="col-sm-8 col-md-7 col-lg-6 col-xl-4">
                     <div class="bg-light rounded">
                         <div class="p-4">
-                            <h1 class="display-6 mb-4">Cart <span class="fw-normal">Total</span></h1>
+                            <h1 class="mb-4">Cart total</h1>
                             <div class="d-flex justify-content-between mb-4">
                                 <h5 class="mb-0 me-4">Subtotal:</h5>
-                                <p class="mb-0">VNĐ {{ number_format($data['data']['total'], 2) }}</p>
-                            </div>
-                            {{-- <div class="d-flex justify-content-between">
-                                <h5 class="mb-0 me-4">Shipping</h5>
                                 <div class="">
-                                    <p class="mb-0">Flat rate: $3.00</p>
+                                    <span>VNĐ</span>
+                                    <span class="product-total mb-0">{{ number_format($data['data']['total'], 2) }}</span>
                                 </div>
-                            </div> --}}
-                            {{-- <p class="mb-0 text-end">Shipping to Ukraine.</p> --}}
+                            </div>
                         </div>
                         <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
                             <h5 class="mb-0 ps-4 me-4">Total</h5>
-                            <p class="mb-0 pe-4">VNĐ {{ number_format($data['data']['total'], 2) }}</p>
+                            <div class="">
+                                <span>VNĐ</span>
+                                <span
+                                    class="product-total-2 mb-0 pe-4">{{ number_format($data['data']['total'], 2) }}</span>
+                            </div>
                         </div>
-                        <a href="{{ route('checkout') }}" class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4"
+                        <a href="{{ route('checkout.index') }}"
+                            class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4"
                             type="button">Proceed Checkout</a>
+                        {{-- <form action="{{ route('vnpay_payment') }}" method="post">
+                            @csrf
+                            <button name="redirect" type="submit">VNPAY</button>
+                        </form> --}}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('assets/users/js/ajax-cart.js') }}"></script>
+@endpush
